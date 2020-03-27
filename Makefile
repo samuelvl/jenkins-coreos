@@ -5,7 +5,7 @@ tf_backend_conf=configuration/backend
 tf_variables=configuration/tfvars
 environment=localhost
 
-all: deploy test
+all: init plan deploy test
 init:
 	terraform init \
 		-backend-config="$(tf_backend_conf)/$(environment).conf" $(tf_files)
