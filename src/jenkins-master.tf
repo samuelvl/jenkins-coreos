@@ -1,17 +1,7 @@
-data "template_file" "jenkins_master_ignition" {
-  template = file(format("%s/ignition/jenkins-master.json.tpl", path.module))
-
-  vars = {
-    hostname_b64       = base64encode(format("%s.%s", var.jenkins_master.hostname, var.dns.domain))
-    ssh_allowed_pubkey = trimspace(file(format("%s/ssh/id_rsa.pub", path.module)))
-    core_password      = "$5$XMoeOXG6$8WZoUCLhh8L/KYhsJN2pIRb3asZ2Xos3rJla.FA1TI7"
-  }
-}
-
 resource "libvirt_ignition" "jenkins_master" {
   name    = format("%s.ign", var.jenkins_master.hostname)
   pool    = var.libvirt.pool
-  content = data.template_file.jenkins_master_ignition.rendered
+  content = file(format("%s/ignition/jenkins-master-ign.json", path.module))
 }
 
 resource "libvirt_volume" "jenkins_master_image" {

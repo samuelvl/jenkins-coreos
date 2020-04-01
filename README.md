@@ -133,8 +133,23 @@ systemctl restart libvirtd
 
 ## Deploy Jenkins
 
+Edit the `jenkins-master-ign.yml` **[FCC YAML file](https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/)** to configure the Jenkins instance at boot time and covert it to ignition specification using FCCT (FCOS Transpiler) tool.
+
+```bash
+podman run -i --rm quay.io/coreos/fcct:release --pretty --strict \
+  < src/ignition/jenkins-master-ign.yml > src/ignition/jenkins-master-ign.json
 ```
+
+Deploy Jenkins instances using Terraform.
+
+```bash
 make
+```
+
+Install `simple-theme` plugin and set the following theme.
+
+```bash
+https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-blue-grey.css
 ```
 
 ## References
@@ -143,3 +158,6 @@ make
 - https://www.terraform.io/intro/index.html
 - https://github.com/dmacvicar/terraform-provider-libvirt
 - https://docs.fedoraproject.org/en-US/fedora-coreos/getting-started/#_launching_with_qemu_or_libvirt
+- https://libvirt.org/formatdomain.html#elements
+- https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config
+- https://github.com/jenkinsci/docker

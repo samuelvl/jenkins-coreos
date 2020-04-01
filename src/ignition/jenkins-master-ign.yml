@@ -1,0 +1,81 @@
+variant: fcos
+version: 1.0.0
+passwd:
+  users:
+    - name: maintuser
+      groups:
+        - sudo
+      ssh_authorized_keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0NK6M/cGCjwEf4jLIN42xBFCUWt+pXRuE+n21YadwqcUHdBn6qv4lyyVFMQ22fzcRGCb5D2yU1+UCiNNEnMFpQxTrqnvzIyhaLJAxtkO24bOk2wG2rLaTLCxJnhInfgRM3BJ/Rom95HAdnGPdw8yqBqtcHndPeKcTBF0eeGPi3EZVb081qdnftPMd45p5M2Zo1x6tbQpQfKeXqm7UF79tZoaIJ1yGEIJhHrAQf/zUgCaYDOXUlnTc9O9g/mIoEXIu21ZawR93h9HZHZvod9gWWvnlouOJBq+YfqvSdVxhmD1xXNkbTn+TZSURo+ne35yVD8rsXWjGwm4y2zE9d+md+C7+vjuwgGBY15Vln2SgL6G+QRcz6kwsFwZrOLI0BwjFhvBOSallvl9rittSwke9Nk+nw9+2HrY/LucgeB6qZUNI5BzTwzfNjBxJVYhcIXcOdem5TBsovpvcBxnNVHOpqiU8wVoNa4P55duCX4CRyV8gsrAVBIk/Y+IrucMR4D/YqJaVBpi3D3xMe3mVj0jMIYQqvRfQkK4Dw04bRKFUjf7drc3rzFu/72QtWaM98t1b1IhMOMNOtiNhploNcGuuSVgDfhnY24RV1sJ8hxjH85YBUNMi6+Z2Et+hiQ88kUaXyapVg6E2KvtLy7DBoNDlEZtxJkzS98Isf2tzQ8mS9w== samuvl@redhat.com
+    - name: jenkins
+      uid: 9999
+      system: true
+      no_create_home: true
+      shell: /usr/sbin/nologin
+storage:
+  directories:
+    - path: /var/lib/jenkins
+      mode: 0750
+      user:
+        name: jenkins
+      group:
+        name: root
+    - path: /var/lib/jenkins/data
+      mode: 0750
+      user:
+        name: jenkins
+      group:
+        name: root
+  files:
+    - path: /etc/hostname
+      overwrite: true
+      mode: 0644
+      user:
+        name: root
+      group:
+        name: root
+      contents:
+        inline: jenkins-master.libvirt.local
+    - path: /etc/sysconfig/jenkins
+      mode: 0640
+      user:
+        name: root
+      group:
+        name: root
+      contents:
+        inline: |
+          JENKINS_IMAGE="docker.io/jenkins/jenkins:2.229-centos"
+          JENKINS_UID="9999"
+          JENKINS_MAX_CPU="0.800"
+          JENKINS_MAX_MEMORY="1000m"
+          JENKINS_HTTP_PORT="8080"
+          JENKINS_EXECUTOR_PORT="50000"
+          JENKINS_DATA_PATH="/var/lib/jenkins/data"
+systemd:
+  units:
+    - name: jenkins.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Run Jenkins master
+        After=network-online.target
+        Wants=network-online.target
+
+        [Service]
+        EnvironmentFile=/etc/sysconfig/jenkins
+        TimeoutStartSec=180
+        Restart=always
+        ExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}
+        ExecStart=/bin/podman run --name %n --rm \
+            --user ${JENKINS_UID} \
+            --cpus ${JENKINS_MAX_CPU} \
+            --memory ${JENKINS_MAX_MEMORY} \
+            --publish ${JENKINS_HTTP_PORT}:8080 \
+            --publish ${JENKINS_EXECUTOR_PORT}:50000 \
+            --volume ${JENKINS_DATA_PATH}:/var/jenkins_home:z \
+            ${JENKINS_IMAGE}
+        ExecStop=/bin/podman stop %n
+        ExecReload=/bin/podman restart %n
+
+        [Install]
+        WantedBy=multi-user.target
