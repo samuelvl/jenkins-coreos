@@ -1,6 +1,6 @@
 # Jenkins
 
-Deploy immutable Jenkins instance using Terraform and Fedora CoreOS.
+Deploy immutable Jenkins instance using Terraform, Fedora CoreOS and ignition.
 
 ## Requirements
 
@@ -133,7 +133,7 @@ systemctl restart libvirtd
 
 ## Deploy Jenkins
 
-Edit the `jenkins-master-ign.yml` **[FCC YAML file](https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/)** to configure the Jenkins instance at boot time and covert it to ignition specification using FCCT (FCOS Transpiler) tool.
+Edit the `jenkins-master-ign.yml` **[FCC YAML file](https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/)** to configure the Jenkins instance at boot time and convert it to ignition specification using FCCT (FCOS Transpiler) tool.
 
 ```bash
 podman run -i --rm quay.io/coreos/fcct:release --pretty --strict \
