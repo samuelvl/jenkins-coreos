@@ -5,6 +5,7 @@ Deploy immutable Jenkins instance using Terraform and Fedora CoreOS.
 ## Requirements
 
 - Terraform (tested with 0.12.24 version).
+- Libvirt (tested with 5.6.0 version).
 - Libvirt provider for Terraform (tested with 0.6.1 version).
 
 Install requirements.
@@ -16,6 +17,16 @@ Install requirements.
 ## Setup Libvirt
 
 Use `virsh` command utility to configure libvirt.
+
+```bash
+export LIBVIRT_DEFAULT_URI="qemu:///system"
+```
+
+Check if libvirt is running.
+
+```bash
+virsh version --daemon
+```
 
 ### Fedora CoreOS
 
