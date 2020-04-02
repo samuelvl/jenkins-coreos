@@ -67,7 +67,7 @@ Enable and start `jenkins-ignition` pool.
 
 ```bash
 virsh pool-autostart jenkins-ignition
-virsh pool-start jenkins-ignition # Or use pool-create-as
+virsh pool-start jenkins-ignition
 ```
 
 Check the pool status.
@@ -86,8 +86,13 @@ virsh net-define /dev/stdin <<EOF
   <name>dmz</name>
   <bridge name="virbr100" stp="on" delay="0" zone="libvirt" />
   <mtu size="1500"/>
-  <domain name="libvirt.local" localOnly="no"/>
-  <ip address="172.3.2.1" netmask="255.255.255.0">
+  <domain name="libvirt.local" localOnly="yes"/>
+  <dns enable="yes">
+    <forwarder addr="80.80.80.80"/>
+    <forwarder addr="80.80.81.81"/>
+    <txt name="_hello.libvirt.local" value="world!"/>
+  </dns>
+  <ip address="172.3.2.1" netmask="255.255.255.0" localPtr="yes">
     <dhcp>
       <range start="172.3.2.100" end="172.3.2.254"/>
     </dhcp>
@@ -105,7 +110,7 @@ Enable and start `dmz` network.
 
 ```bash
 virsh net-autostart dmz
-virsh net-start dmz # Or use net-create
+virsh net-start dmz
 ```
 
 Check the network status.
@@ -131,6 +136,29 @@ Restart libvirt daemon.
 systemctl restart libvirtd
 ```
 
+### DNS
+
+If `<dns enable="yes"/>` is enabled in a libvirt network, it will use `dnsmasq` to setup a DNS server listening in the port 53 of the network interface (e.g. virbr100). This DNS will handle A records for virtual machines but can also be used for creating additional A, PTR, SRV and TXT records.
+
+Configure NetworkManager to also use `dnamsq` to setup a DNS server to resolve all local requests. Edit the file `/etc/NetworkManager/conf.d/localdns.conf` and add the following configuration.
+
+```bash
+[main]
+dns=dnsmasq
+```
+
+Configure the NetworkManager DNS server to forward requests, with destination the libvirt domains, to corresponding DNS servers. Edit the file `/etc/NetworkManager/dnsmasq.d/libvirt_dnsmasq.conf` and add the following configuration (use your network interface gateway).
+
+```bash
+server=/libvirt.local/172.3.2.1
+```
+
+Restart NetworkManager service.
+
+```bash
+systemctl restart NetworkManager
+```
+
 ## Deploy Jenkins
 
 Edit the `jenkins-master-ign.yml` **[FCC YAML file](https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/)** to configure the Jenkins instance at boot time and convert it to ignition specification using FCCT (FCOS Transpiler) tool.
@@ -146,10 +174,22 @@ Deploy Jenkins instances using Terraform.
 make
 ```
 
+Go to `http://jenkins-master.libvirt.local:8080/` to setup Jenkins.
+
+### Configuration
+
 Install `simple-theme` plugin and set the following theme.
 
 ```bash
 https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-blue-grey.css
+```
+
+## Troubleshooting
+
+Use SSH private key to access jenkins machines.
+
+```bash
+ssh -i src/ssh/id_rsa maintuser@jenkins-master.libvirt.local
 ```
 
 ## References
@@ -158,6 +198,7 @@ https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-blu
 - https://www.terraform.io/intro/index.html
 - https://github.com/dmacvicar/terraform-provider-libvirt
 - https://docs.fedoraproject.org/en-US/fedora-coreos/getting-started/#_launching_with_qemu_or_libvirt
+- https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/
 - https://libvirt.org/formatdomain.html#elements
 - https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config
 - https://github.com/jenkinsci/docker
