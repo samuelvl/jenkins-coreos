@@ -3,10 +3,11 @@ version: 1.0.0
 passwd:
   users:
     - name: maintuser
+      uid: 1001
       groups:
         - sudo
       ssh_authorized_keys:
-        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0NK6M/cGCjwEf4jLIN42xBFCUWt+pXRuE+n21YadwqcUHdBn6qv4lyyVFMQ22fzcRGCb5D2yU1+UCiNNEnMFpQxTrqnvzIyhaLJAxtkO24bOk2wG2rLaTLCxJnhInfgRM3BJ/Rom95HAdnGPdw8yqBqtcHndPeKcTBF0eeGPi3EZVb081qdnftPMd45p5M2Zo1x6tbQpQfKeXqm7UF79tZoaIJ1yGEIJhHrAQf/zUgCaYDOXUlnTc9O9g/mIoEXIu21ZawR93h9HZHZvod9gWWvnlouOJBq+YfqvSdVxhmD1xXNkbTn+TZSURo+ne35yVD8rsXWjGwm4y2zE9d+md+C7+vjuwgGBY15Vln2SgL6G+QRcz6kwsFwZrOLI0BwjFhvBOSallvl9rittSwke9Nk+nw9+2HrY/LucgeB6qZUNI5BzTwzfNjBxJVYhcIXcOdem5TBsovpvcBxnNVHOpqiU8wVoNa4P55duCX4CRyV8gsrAVBIk/Y+IrucMR4D/YqJaVBpi3D3xMe3mVj0jMIYQqvRfQkK4Dw04bRKFUjf7drc3rzFu/72QtWaM98t1b1IhMOMNOtiNhploNcGuuSVgDfhnY24RV1sJ8hxjH85YBUNMi6+Z2Et+hiQ88kUaXyapVg6E2KvtLy7DBoNDlEZtxJkzS98Isf2tzQ8mS9w== samuvl@redhat.com
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0NK6M/cGCjwEf4jLIN42xBFCUWt+pXRuE+n21YadwqcUHdBn6qv4lyyVFMQ22fzcRGCb5D2yU1+UCiNNEnMFpQxTrqnvzIyhaLJAxtkO24bOk2wG2rLaTLCxJnhInfgRM3BJ/Rom95HAdnGPdw8yqBqtcHndPeKcTBF0eeGPi3EZVb081qdnftPMd45p5M2Zo1x6tbQpQfKeXqm7UF79tZoaIJ1yGEIJhHrAQf/zUgCaYDOXUlnTc9O9g/mIoEXIu21ZawR93h9HZHZvod9gWWvnlouOJBq+YfqvSdVxhmD1xXNkbTn+TZSURo+ne35yVD8rsXWjGwm4y2zE9d+md+C7+vjuwgGBY15Vln2SgL6G+QRcz6kwsFwZrOLI0BwjFhvBOSallvl9rittSwke9Nk+nw9+2HrY/LucgeB6qZUNI5BzTwzfNjBxJVYhcIXcOdem5TBsovpvcBxnNVHOpqiU8wVoNa4P55duCX4CRyV8gsrAVBIk/Y+IrucMR4D/YqJaVBpi3D3xMe3mVj0jMIYQqvRfQkK4Dw04bRKFUjf7drc3rzFu/72QtWaM98t1b1IhMOMNOtiNhploNcGuuSVgDfhnY24RV1sJ8hxjH85YBUNMi6+Z2Et+hiQ88kUaXyapVg6E2KvtLy7DBoNDlEZtxJkzS98Isf2tzQ8mS9w== maintuser@libvirt.local
     - name: jenkins
       uid: 9999
       system: true

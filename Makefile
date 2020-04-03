@@ -11,6 +11,10 @@ init:
 		-backend-config="$(tf_backend_conf)/$(environment).conf" $(tf_files)
 plan:
 	@echo "Planing infrastructure changes..."
+	@podman run -i --rm quay.io/coreos/fcct:release --pretty --strict \
+  		< src/ignition/jenkins-master/ignition.yml > src/ignition/jenkins-master/ignition.json
+	@podman run -i --rm quay.io/coreos/fcct:release --pretty --strict \
+		< src/ignition/jenkins-slave/ignition.yml > src/ignition/jenkins-slave/ignition.json
 	terraform plan \
 		-var-file="$(tf_variables)/default.tfvars" \
 		-var-file="$(tf_variables)/$(environment).tfvars" \

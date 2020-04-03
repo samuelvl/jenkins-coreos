@@ -1,0 +1,89 @@
+{
+  "ignition": {
+    "config": {
+      "replace": {
+        "source": null,
+        "verification": {}
+      }
+    },
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "3.0.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "groups": [
+          "sudo"
+        ],
+        "name": "maintuser",
+        "sshAuthorizedKeys": [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0NK6M/cGCjwEf4jLIN42xBFCUWt+pXRuE+n21YadwqcUHdBn6qv4lyyVFMQ22fzcRGCb5D2yU1+UCiNNEnMFpQxTrqnvzIyhaLJAxtkO24bOk2wG2rLaTLCxJnhInfgRM3BJ/Rom95HAdnGPdw8yqBqtcHndPeKcTBF0eeGPi3EZVb081qdnftPMd45p5M2Zo1x6tbQpQfKeXqm7UF79tZoaIJ1yGEIJhHrAQf/zUgCaYDOXUlnTc9O9g/mIoEXIu21ZawR93h9HZHZvod9gWWvnlouOJBq+YfqvSdVxhmD1xXNkbTn+TZSURo+ne35yVD8rsXWjGwm4y2zE9d+md+C7+vjuwgGBY15Vln2SgL6G+QRcz6kwsFwZrOLI0BwjFhvBOSallvl9rittSwke9Nk+nw9+2HrY/LucgeB6qZUNI5BzTwzfNjBxJVYhcIXcOdem5TBsovpvcBxnNVHOpqiU8wVoNa4P55duCX4CRyV8gsrAVBIk/Y+IrucMR4D/YqJaVBpi3D3xMe3mVj0jMIYQqvRfQkK4Dw04bRKFUjf7drc3rzFu/72QtWaM98t1b1IhMOMNOtiNhploNcGuuSVgDfhnY24RV1sJ8hxjH85YBUNMi6+Z2Et+hiQ88kUaXyapVg6E2KvtLy7DBoNDlEZtxJkzS98Isf2tzQ8mS9w== maintuser@libvirt.local"
+        ],
+        "uid": 1001
+      },
+      {
+        "groups": [
+          "docker"
+        ],
+        "name": "jenkins",
+        "sshAuthorizedKeys": [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0NK6M/cGCjwEf4jLIN42xBFCUWt+pXRuE+n21YadwqcUHdBn6qv4lyyVFMQ22fzcRGCb5D2yU1+UCiNNEnMFpQxTrqnvzIyhaLJAxtkO24bOk2wG2rLaTLCxJnhInfgRM3BJ/Rom95HAdnGPdw8yqBqtcHndPeKcTBF0eeGPi3EZVb081qdnftPMd45p5M2Zo1x6tbQpQfKeXqm7UF79tZoaIJ1yGEIJhHrAQf/zUgCaYDOXUlnTc9O9g/mIoEXIu21ZawR93h9HZHZvod9gWWvnlouOJBq+YfqvSdVxhmD1xXNkbTn+TZSURo+ne35yVD8rsXWjGwm4y2zE9d+md+C7+vjuwgGBY15Vln2SgL6G+QRcz6kwsFwZrOLI0BwjFhvBOSallvl9rittSwke9Nk+nw9+2HrY/LucgeB6qZUNI5BzTwzfNjBxJVYhcIXcOdem5TBsovpvcBxnNVHOpqiU8wVoNa4P55duCX4CRyV8gsrAVBIk/Y+IrucMR4D/YqJaVBpi3D3xMe3mVj0jMIYQqvRfQkK4Dw04bRKFUjf7drc3rzFu/72QtWaM98t1b1IhMOMNOtiNhploNcGuuSVgDfhnY24RV1sJ8hxjH85YBUNMi6+Z2Et+hiQ88kUaXyapVg6E2KvtLy7DBoNDlEZtxJkzS98Isf2tzQ8mS9w== jenkins@libvirt.local"
+        ],
+        "uid": 9999
+      }
+    ]
+  },
+  "storage": {
+    "directories": [
+      {
+        "group": {
+          "name": "root"
+        },
+        "path": "/var/lib/jenkins",
+        "user": {
+          "name": "jenkins"
+        },
+        "mode": 488
+      },
+      {
+        "group": {
+          "name": "root"
+        },
+        "path": "/var/lib/jenkins/agent",
+        "user": {
+          "name": "jenkins"
+        },
+        "mode": 488
+      }
+    ],
+    "files": [
+      {
+        "group": {
+          "name": "root"
+        },
+        "overwrite": true,
+        "path": "/etc/hostname",
+        "user": {
+          "name": "root"
+        },
+        "contents": {
+          "source": "data:,jenkins-slave.libvirt.local",
+          "verification": {}
+        },
+        "mode": 420
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Install Overlay Packages\nConditionFirstBoot=yes\nWants=network-online.target\nBefore=boot-complete.target\nAfter=network-online.target\nAfter=multi-user.target\n\n[Service]\nType=oneshot\nExecStart=rpm-ostree install java-1.8.0-openjdk\n# An alternative to --reboot\nExecStartPost=rpm-ostree ex livefs --i-like-danger\n\n[Install]\nRequiredBy=boot-complete.target\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "overlay-install.service"
+      }
+    ]
+  }
+}

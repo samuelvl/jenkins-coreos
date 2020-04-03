@@ -26,3 +26,14 @@ variable "jenkins_master" {
     memory   = number
   })
 }
+
+# Jenkins slave VM configuration
+variable "jenkins_slave" {
+  description = "Configuration for Jenkins slave virtual machine"
+  type = object({
+    hostname = string,
+    base_img = string,
+    vcpu     = number,
+    memory   = number
+  })
+}

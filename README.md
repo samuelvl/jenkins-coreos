@@ -161,28 +161,35 @@ systemctl restart NetworkManager
 
 ## Deploy Jenkins
 
-Edit the `jenkins-master-ign.yml` **[FCC YAML file](https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/)** to configure the Jenkins instance at boot time and convert it to ignition specification using FCCT (FCOS Transpiler) tool.
-
-```bash
-podman run -i --rm quay.io/coreos/fcct:release --pretty --strict \
-  < src/ignition/jenkins-master-ign.yml > src/ignition/jenkins-master-ign.json
-```
-
-Deploy Jenkins instances using Terraform.
+Edit the `jenkins-master-ign.yml` and `jenkins-slave-ign.yml` **[FCC YAML files](https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/)** to generate Ignition files and deploy instances using Terraform.
 
 ```bash
 make
 ```
 
-Go to `http://jenkins-master.libvirt.local:8080/` to setup Jenkins.
-
 ### Configuration
 
-Install `simple-theme` plugin and set the following theme.
+Go to `http://jenkins-master.libvirt.local:8080/` to setup Jenkins and install the following plugins.
+
+- Simple Theme
+- SSH Build Agents
+- Pipeline: Declarative
+- Pipeline: Stage View
+
+Set a material theme to improve (a little bit) the old and ugly UI.
 
 ```bash
 https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-blue-grey.css
 ```
+
+Add jenkins slaves to run build.
+
+- **Name**: slave-docker
+- **Description**: Jenkins slave to run docker containers
+- **Number of executors**: 20
+- **Remote root directory**: /var/lib/jenkins/agent
+- **Labels**: linux rhel x86 docker
+- **Usage**: Only build jobs with label expressions matching this node
 
 ## Troubleshooting
 
@@ -191,6 +198,11 @@ Use SSH private key to access jenkins machines.
 ```bash
 ssh -i src/ssh/id_rsa maintuser@jenkins-master.libvirt.local
 ```
+
+## TODO
+
+- Automate plugins installation
+- Automate agent node aggregation
 
 ## References
 

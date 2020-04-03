@@ -1,7 +1,7 @@
 resource "libvirt_ignition" "jenkins_master" {
   name    = format("%s.ign", var.jenkins_master.hostname)
   pool    = var.libvirt.pool
-  content = file(format("%s/ignition/jenkins-master-ign.json", path.module))
+  content = file(format("%s/ignition/jenkins-master/ignition.json", path.module))
 }
 
 resource "libvirt_volume" "jenkins_master_image" {
