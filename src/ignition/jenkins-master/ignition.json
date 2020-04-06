@@ -15,6 +15,13 @@
   "passwd": {
     "users": [
       {
+        "name": "jenkins",
+        "noCreateHome": true,
+        "shell": "/usr/sbin/nologin",
+        "system": true,
+        "uid": 9999
+      },
+      {
         "groups": [
           "sudo"
         ],
@@ -23,18 +30,31 @@
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0NK6M/cGCjwEf4jLIN42xBFCUWt+pXRuE+n21YadwqcUHdBn6qv4lyyVFMQ22fzcRGCb5D2yU1+UCiNNEnMFpQxTrqnvzIyhaLJAxtkO24bOk2wG2rLaTLCxJnhInfgRM3BJ/Rom95HAdnGPdw8yqBqtcHndPeKcTBF0eeGPi3EZVb081qdnftPMd45p5M2Zo1x6tbQpQfKeXqm7UF79tZoaIJ1yGEIJhHrAQf/zUgCaYDOXUlnTc9O9g/mIoEXIu21ZawR93h9HZHZvod9gWWvnlouOJBq+YfqvSdVxhmD1xXNkbTn+TZSURo+ne35yVD8rsXWjGwm4y2zE9d+md+C7+vjuwgGBY15Vln2SgL6G+QRcz6kwsFwZrOLI0BwjFhvBOSallvl9rittSwke9Nk+nw9+2HrY/LucgeB6qZUNI5BzTwzfNjBxJVYhcIXcOdem5TBsovpvcBxnNVHOpqiU8wVoNa4P55duCX4CRyV8gsrAVBIk/Y+IrucMR4D/YqJaVBpi3D3xMe3mVj0jMIYQqvRfQkK4Dw04bRKFUjf7drc3rzFu/72QtWaM98t1b1IhMOMNOtiNhploNcGuuSVgDfhnY24RV1sJ8hxjH85YBUNMi6+Z2Et+hiQ88kUaXyapVg6E2KvtLy7DBoNDlEZtxJkzS98Isf2tzQ8mS9w== maintuser@libvirt.local"
         ],
         "uid": 1001
-      },
-      {
-        "name": "jenkins",
-        "noCreateHome": true,
-        "shell": "/usr/sbin/nologin",
-        "system": true,
-        "uid": 9999
       }
     ]
   },
   "storage": {
     "directories": [
+      {
+        "group": {
+          "name": "root"
+        },
+        "path": "/etc/jenkins",
+        "user": {
+          "name": "jenkins"
+        },
+        "mode": 488
+      },
+      {
+        "group": {
+          "name": "root"
+        },
+        "path": "/etc/jenkins/plugins",
+        "user": {
+          "id": 1000
+        },
+        "mode": 488
+      },
       {
         "group": {
           "name": "root"
@@ -51,7 +71,7 @@
         },
         "path": "/var/lib/jenkins/data",
         "user": {
-          "name": "jenkins"
+          "id": 1000
         },
         "mode": 488
       }
@@ -76,12 +96,26 @@
         "group": {
           "name": "root"
         },
+        "path": "/etc/jenkins/plugins.txt",
+        "user": {
+          "id": 1000
+        },
+        "contents": {
+          "source": "data:,configuration-as-code%3A1.38%0Asimple-theme-plugin%3A0.6%0Assh-slaves%3A1.31.1%0Apipeline-model-definition%3A1.6.0%0A",
+          "verification": {}
+        },
+        "mode": 416
+      },
+      {
+        "group": {
+          "name": "root"
+        },
         "path": "/etc/sysconfig/jenkins",
         "user": {
           "name": "root"
         },
         "contents": {
-          "source": "data:,JENKINS_IMAGE%3D%22docker.io%2Fjenkins%2Fjenkins%3A2.229-centos%22%0AJENKINS_UID%3D%229999%22%0AJENKINS_MAX_CPU%3D%220.800%22%0AJENKINS_MAX_MEMORY%3D%221000m%22%0AJENKINS_HTTP_PORT%3D%228080%22%0AJENKINS_EXECUTOR_PORT%3D%2250000%22%0AJENKINS_DATA_PATH%3D%22%2Fvar%2Flib%2Fjenkins%2Fdata%22%0A",
+          "source": "data:,JENKINS_IMAGE%3D%22docker.io%2Fjenkins%2Fjenkins%3A2.229-centos%22%0AJENKINS_UID%3D%221000%22%0AJENKINS_MAX_CPU%3D%221.000%22%0AJENKINS_MAX_MEMORY%3D%221000m%22%0AJENKINS_HTTP_PORT%3D%228080%22%0AJENKINS_EXECUTOR_PORT%3D%2250000%22%0AJENKINS_DATA_PATH%3D%22%2Fvar%2Flib%2Fjenkins%2Fdata%22%0AJENKINS_PLUGINS%3D%22%2Fetc%2Fjenkins%2Fplugins.txt%22%0AJENKINS_PLUGINS_PATH%3D%22%2Fetc%2Fjenkins%2Fplugins%22%0AJENKINS_JAVA_OPTS%3D%22-Djenkins.install.runSetupWizard%3Dfalse%20-Djava.awt.headless%3Dtrue%22%0A",
           "verification": {}
         },
         "mode": 416
@@ -91,7 +125,12 @@
   "systemd": {
     "units": [
       {
-        "contents": "[Unit]\nDescription=Run Jenkins master\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nEnvironmentFile=/etc/sysconfig/jenkins\nTimeoutStartSec=180\nRestart=always\nExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}\nExecStart=/bin/podman run --name %n --rm \\\n    --user ${JENKINS_UID} \\\n    --cpus ${JENKINS_MAX_CPU} \\\n    --memory ${JENKINS_MAX_MEMORY} \\\n    --publish ${JENKINS_HTTP_PORT}:8080 \\\n    --publish ${JENKINS_EXECUTOR_PORT}:50000 \\\n    --volume ${JENKINS_DATA_PATH}:/var/jenkins_home:z \\\n    ${JENKINS_IMAGE}\nExecStop=/bin/podman stop %n\nExecReload=/bin/podman restart %n\n\n[Install]\nWantedBy=multi-user.target",
+        "contents": "[Unit]\nDescription=Download Jenkins plugins\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=oneshot\nEnvironmentFile=/etc/sysconfig/jenkins\nRemainAfterExit=true\nStandardOutput=journal\nExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}\nExecStart=/bin/podman run --name %n --rm \\\n    --user       ${JENKINS_UID} \\\n    --cpus       ${JENKINS_MAX_CPU} \\\n    --memory     ${JENKINS_MAX_MEMORY} \\\n    --volume     ${JENKINS_PLUGINS}:/usr/share/jenkins/ref/plugins.txt:z \\\n    --volume     ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \\\n    --entrypoint /bin/bash \\\n    ${JENKINS_IMAGE} -c \"/usr/local/bin/install-plugins.sh \u003c /usr/share/jenkins/ref/plugins.txt\"\nExecStop=/bin/sh -c '/bin/rm -rf ${JENKINS_PLUGINS}/*'\n\n[Install]\nWantedBy=multi-user.target\n",
+        "enabled": true,
+        "name": "jenkins-plugins.service"
+      },
+      {
+        "contents": "[Unit]\nDescription=Run Jenkins master\nAfter=network-online.target jenkins-plugins.service\nWants=network-online.target jenkins-plugins.service\n\n[Service]\nType=simple\nEnvironmentFile=/etc/sysconfig/jenkins\nTimeoutStartSec=180\nRestart=always\nStandardOutput=journal\nExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}\nExecStart=/bin/podman run --name %n --rm \\\n    --user    ${JENKINS_UID} \\\n    --cpus    ${JENKINS_MAX_CPU} \\\n    --memory  ${JENKINS_MAX_MEMORY} \\\n    --publish ${JENKINS_HTTP_PORT}:8080 \\\n    --publish ${JENKINS_EXECUTOR_PORT}:50000 \\\n    --volume  ${JENKINS_DATA_PATH}:/var/jenkins_home:z \\\n    --volume  ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \\\n    --env     JAVA_OPTS=\"${JENKINS_JAVA_OPTS}\" \\\n    ${JENKINS_IMAGE}\nExecStop=/bin/podman stop %n\nExecReload=/bin/podman restart %n\n\n[Install]\nWantedBy=multi-user.target",
         "enabled": true,
         "name": "jenkins.service"
       }

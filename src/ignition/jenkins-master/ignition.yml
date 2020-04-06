@@ -2,19 +2,31 @@ variant: fcos
 version: 1.0.0
 passwd:
   users:
+    - name: jenkins
+      uid: 9999 # 1000 is already used by core user
+      system: true
+      no_create_home: true
+      shell: /usr/sbin/nologin
     - name: maintuser
       uid: 1001
       groups:
         - sudo
       ssh_authorized_keys:
         - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0NK6M/cGCjwEf4jLIN42xBFCUWt+pXRuE+n21YadwqcUHdBn6qv4lyyVFMQ22fzcRGCb5D2yU1+UCiNNEnMFpQxTrqnvzIyhaLJAxtkO24bOk2wG2rLaTLCxJnhInfgRM3BJ/Rom95HAdnGPdw8yqBqtcHndPeKcTBF0eeGPi3EZVb081qdnftPMd45p5M2Zo1x6tbQpQfKeXqm7UF79tZoaIJ1yGEIJhHrAQf/zUgCaYDOXUlnTc9O9g/mIoEXIu21ZawR93h9HZHZvod9gWWvnlouOJBq+YfqvSdVxhmD1xXNkbTn+TZSURo+ne35yVD8rsXWjGwm4y2zE9d+md+C7+vjuwgGBY15Vln2SgL6G+QRcz6kwsFwZrOLI0BwjFhvBOSallvl9rittSwke9Nk+nw9+2HrY/LucgeB6qZUNI5BzTwzfNjBxJVYhcIXcOdem5TBsovpvcBxnNVHOpqiU8wVoNa4P55duCX4CRyV8gsrAVBIk/Y+IrucMR4D/YqJaVBpi3D3xMe3mVj0jMIYQqvRfQkK4Dw04bRKFUjf7drc3rzFu/72QtWaM98t1b1IhMOMNOtiNhploNcGuuSVgDfhnY24RV1sJ8hxjH85YBUNMi6+Z2Et+hiQ88kUaXyapVg6E2KvtLy7DBoNDlEZtxJkzS98Isf2tzQ8mS9w== maintuser@libvirt.local
-    - name: jenkins
-      uid: 9999
-      system: true
-      no_create_home: true
-      shell: /usr/sbin/nologin
 storage:
   directories:
+    - path: /etc/jenkins
+      mode: 0750
+      user:
+        name: jenkins
+      group:
+        name: root
+    - path: /etc/jenkins/plugins
+      mode: 0750
+      user:
+        id: 1000 # Jenkins UID inside container
+      group:
+        name: root
     - path: /var/lib/jenkins
       mode: 0750
       user:
@@ -24,7 +36,7 @@ storage:
     - path: /var/lib/jenkins/data
       mode: 0750
       user:
-        name: jenkins
+        id: 1000 # Jenkins UID inside container
       group:
         name: root
   files:
@@ -37,6 +49,18 @@ storage:
         name: root
       contents:
         inline: jenkins-master.libvirt.local
+    - path: /etc/jenkins/plugins.txt
+      mode: 0640
+      user:
+        id: 1000 # Jenkins UID inside container
+      group:
+        name: root
+      contents:
+        inline: |
+          configuration-as-code:1.38
+          simple-theme-plugin:0.6
+          ssh-slaves:1.31.1
+          pipeline-model-definition:1.6.0
     - path: /etc/sysconfig/jenkins
       mode: 0640
       user:
@@ -46,34 +70,67 @@ storage:
       contents:
         inline: |
           JENKINS_IMAGE="docker.io/jenkins/jenkins:2.229-centos"
-          JENKINS_UID="9999"
-          JENKINS_MAX_CPU="0.800"
+          JENKINS_UID="1000"
+          JENKINS_MAX_CPU="1.000"
           JENKINS_MAX_MEMORY="1000m"
           JENKINS_HTTP_PORT="8080"
           JENKINS_EXECUTOR_PORT="50000"
           JENKINS_DATA_PATH="/var/lib/jenkins/data"
+          JENKINS_PLUGINS="/etc/jenkins/plugins.txt"
+          JENKINS_PLUGINS_PATH="/etc/jenkins/plugins"
+          JENKINS_JAVA_OPTS="-Djenkins.install.runSetupWizard=false -Djava.awt.headless=true"
 systemd:
   units:
+    - name: jenkins-plugins.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Download Jenkins plugins
+        After=network-online.target
+        Wants=network-online.target
+
+        [Service]
+        Type=oneshot
+        EnvironmentFile=/etc/sysconfig/jenkins
+        RemainAfterExit=true
+        StandardOutput=journal
+        ExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}
+        ExecStart=/bin/podman run --name %n --rm \
+            --user       ${JENKINS_UID} \
+            --cpus       ${JENKINS_MAX_CPU} \
+            --memory     ${JENKINS_MAX_MEMORY} \
+            --volume     ${JENKINS_PLUGINS}:/usr/share/jenkins/ref/plugins.txt:z \
+            --volume     ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \
+            --entrypoint /bin/bash \
+            ${JENKINS_IMAGE} -c "/usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt"
+        ExecStop=/bin/sh -c '/bin/rm -rf ${JENKINS_PLUGINS}/*'
+
+        [Install]
+        WantedBy=multi-user.target
     - name: jenkins.service
       enabled: true
       contents: |
         [Unit]
         Description=Run Jenkins master
-        After=network-online.target
-        Wants=network-online.target
+        After=network-online.target jenkins-plugins.service
+        Wants=network-online.target jenkins-plugins.service
 
         [Service]
+        Type=simple
         EnvironmentFile=/etc/sysconfig/jenkins
         TimeoutStartSec=180
         Restart=always
+        StandardOutput=journal
         ExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}
         ExecStart=/bin/podman run --name %n --rm \
-            --user ${JENKINS_UID} \
-            --cpus ${JENKINS_MAX_CPU} \
-            --memory ${JENKINS_MAX_MEMORY} \
+            --user    ${JENKINS_UID} \
+            --cpus    ${JENKINS_MAX_CPU} \
+            --memory  ${JENKINS_MAX_MEMORY} \
             --publish ${JENKINS_HTTP_PORT}:8080 \
             --publish ${JENKINS_EXECUTOR_PORT}:50000 \
-            --volume ${JENKINS_DATA_PATH}:/var/jenkins_home:z \
+            --volume  ${JENKINS_DATA_PATH}:/var/jenkins_home:z \
+            --volume  ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \
+            --env     JAVA_OPTS="${JENKINS_JAVA_OPTS}" \
             ${JENKINS_IMAGE}
         ExecStop=/bin/podman stop %n
         ExecReload=/bin/podman restart %n
