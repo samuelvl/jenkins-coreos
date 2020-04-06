@@ -69,7 +69,7 @@ storage:
         name: root
       contents:
         inline: |
-          JENKINS_IMAGE="docker.io/jenkins/jenkins:2.229-centos"
+          JENKINS_IMAGE="docker.io/jenkins/jenkins:2.230-centos"
           JENKINS_UID="1000"
           JENKINS_MAX_CPU="1.000"
           JENKINS_MAX_MEMORY="1000m"
