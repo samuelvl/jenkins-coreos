@@ -101,7 +101,21 @@
           "id": 1000
         },
         "contents": {
-          "source": "data:,configuration-as-code%3A1.38%0Asimple-theme-plugin%3A0.6%0Assh-slaves%3A1.31.1%0Apipeline-model-definition%3A1.6.0%0A",
+          "source": "data:,configuration-as-code%3A1.38%0Asimple-theme-plugin%3A0.6%0Assh-slaves%3A1.31.1%0Apipeline-model-definition%3A1.6.0%0Amatrix-auth%3A2.5%0Arole-strategy%3A2.16%0Aauthorize-project%3A1.3.0%0A",
+          "verification": {}
+        },
+        "mode": 416
+      },
+      {
+        "group": {
+          "name": "root"
+        },
+        "path": "/etc/jenkins/config.yml",
+        "user": {
+          "id": 1000
+        },
+        "contents": {
+          "source": "data:,jenkins%3A%0A%20%20systemMessage%3A%20%22Jenkins%20configured%20automatically%20by%20Jenkins%20Configuration%20as%20Code%20plugin%5Cn%5Cn%22%0A%20%20securityRealm%3A%0A%20%20%20%20local%3A%0A%20%20%20%20%20%20allowsSignup%3A%20false%0A%20%20%20%20%20%20users%3A%0A%20%20%20%20%20%20%20%20-%20id%3A%20administrator%0A%20%20%20%20%20%20%20%20%20%20name%3A%20Jenkins%20Administrator%0A%20%20%20%20%20%20%20%20%20%20password%3A%20%24%7BADMIN_PASSWORD%3A-f60f8e269a732d67c83bb3f41465ae5a%7D%0A%20%20%20%20%20%20%20%20-%20id%3A%20developer%0A%20%20%20%20%20%20%20%20%20%20name%3A%20Jenkins%20Developer%0A%20%20%20%20%20%20%20%20%20%20password%3A%20%24%7BDEVELOPER_PASSWORD%3A-a04c30dda292372faeb9f3d59ed56d36%7D%0A%20%20authorizationStrategy%3A%0A%20%20%20%20globalMatrix%3A%0A%20%20%20%20%20%20grantedPermissions%3A%0A%20%20%20%20%20%20%20%20-%20Overall%2FAdminister%3Aadministrator%0A%20%20%20%20%20%20%20%20-%20Overall%2FRead%3Aauthenticated%0A%20%20remotingSecurity%3A%0A%20%20%20%20enabled%3A%20true%0A%20%20nodes%3A%0A%20%20%20%20-%20permanent%3A%0A%20%20%20%20%20%20%20%20name%3A%20slave-docker%0A%20%20%20%20%20%20%20%20labelString%3A%20linux%20rhel%20x86%20docker%0A%20%20%20%20%20%20%20%20numExecutors%3A%205%0A%20%20%20%20%20%20%20%20remoteFS%3A%20%2Fvar%2Flib%2Fjenkins%2Fagent%0A%20%20%20%20%20%20%20%20launcher%3A%0A%20%20%20%20%20%20%20%20%20%20ssh%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20host%3A%20jenkins-slave.libvirt.local%0A%20%20%20%20%20%20%20%20%20%20%20%20port%3A%2022%0A%20%20%20%20%20%20%20%20%20%20%20%20credentialsId%3A%20ssh_agents_private_key%0A%20%20%20%20%20%20%20%20%20%20%20%20maxNumRetries%3A%206%0A%20%20%20%20%20%20%20%20%20%20%20%20retryWaitTime%3A%2030%0A%20%20%20%20%20%20%20%20%20%20%20%20sshHostKeyVerificationStrategy%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20manuallyTrustedKeyVerificationStrategy%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20requireInitialManualTrust%3A%20false%0A%20%20disabledAdministrativeMonitors%3A%0A%20%20%20%20-%20hudson.node_monitors.MonitorMarkedNodeOffline%0A%20%20%20%20-%20hudson.node_monitors.TemporarySpaceMonitor%0A%20%20%20%20-%20hudson.node_monitors.DiskSpaceMonitor%0Acredentials%3A%0A%20%20system%3A%0A%20%20%20%20domainCredentials%3A%0A%20%20%20%20%20%20-%20credentials%3A%0A%20%20%20%20%20%20%20%20%20%20-%20basicSSHUserPrivateKey%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20scope%3A%20SYSTEM%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20id%3A%20ssh_agents_private_key%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20username%3A%20jenkins%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20description%3A%20%22SSH%20private%20key%20to%20connect%20to%20Jenkins%20agents%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20privateKeySource%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20directEntry%3A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20privateKey%3A%20%24%7BSSH_AGENTS_PRIVATE_KEY%7D%0Aunclassified%3A%0A%20%20location%3A%0A%20%20%20%20adminAddress%3A%20maintuser%40libvirt.local%0A%20%20%20%20url%3A%20http%3A%2F%2Fjenkins-master.libvirt.local%3A8080%0A%20%20simple-theme-plugin%3A%0A%20%20%20%20elements%3A%0A%20%20%20%20%20%20-%20cssUrl%3A%0A%20%20%20%20%20%20%20%20%20%20url%3A%20https%3A%2F%2Fcdn.rawgit.com%2Fafonsof%2Fjenkins-material-theme%2Fgh-pages%2Fdist%2Fmaterial-blue-grey.css%0A",
           "verification": {}
         },
         "mode": 416
@@ -115,7 +129,7 @@
           "name": "root"
         },
         "contents": {
-          "source": "data:,JENKINS_IMAGE%3D%22docker.io%2Fjenkins%2Fjenkins%3A2.229-centos%22%0AJENKINS_UID%3D%221000%22%0AJENKINS_MAX_CPU%3D%221.000%22%0AJENKINS_MAX_MEMORY%3D%221000m%22%0AJENKINS_HTTP_PORT%3D%228080%22%0AJENKINS_EXECUTOR_PORT%3D%2250000%22%0AJENKINS_DATA_PATH%3D%22%2Fvar%2Flib%2Fjenkins%2Fdata%22%0AJENKINS_PLUGINS%3D%22%2Fetc%2Fjenkins%2Fplugins.txt%22%0AJENKINS_PLUGINS_PATH%3D%22%2Fetc%2Fjenkins%2Fplugins%22%0AJENKINS_JAVA_OPTS%3D%22-Djenkins.install.runSetupWizard%3Dfalse%20-Djava.awt.headless%3Dtrue%22%0A",
+          "source": "data:,JENKINS_IMAGE%3D%22docker.io%2Fjenkins%2Fjenkins%3A2.230-centos%22%0AJENKINS_UID%3D%221000%22%0AJENKINS_MAX_CPU%3D%221.000%22%0AJENKINS_MAX_MEMORY%3D%221000m%22%0AJENKINS_HTTP_PORT%3D%228080%22%0AJENKINS_EXECUTOR_PORT%3D%2250000%22%0AJENKINS_DATA_PATH%3D%22%2Fvar%2Flib%2Fjenkins%2Fdata%22%0AJENKINS_PLUGINS%3D%22%2Fetc%2Fjenkins%2Fplugins.txt%22%0AJENKINS_PLUGINS_PATH%3D%22%2Fetc%2Fjenkins%2Fplugins%22%0AJENKINS_CONFIGURATION%3D%22%2Fetc%2Fjenkins%2Fconfig.yml%22%0AJENKINS_JAVA_OPTS%3D%22%5C%0A%20%20-Djenkins.install.runSetupWizard%3Dfalse%20%5C%0A%20%20-Djava.awt.headless%3Dtrue%20%5C%0A%20%20-Dhudson.node_monitors.DiskSpaceMonitor.freeSpaceThreshold%3D128MB%20%5C%0A%20%20-Dhudson.node_monitors.TemporarySpaceMonitor.freeSpaceThreshold%3D128MB%20%5C%0A%22%0A",
           "verification": {}
         },
         "mode": 416
@@ -125,12 +139,12 @@
   "systemd": {
     "units": [
       {
-        "contents": "[Unit]\nDescription=Download Jenkins plugins\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=oneshot\nEnvironmentFile=/etc/sysconfig/jenkins\nRemainAfterExit=true\nStandardOutput=journal\nExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}\nExecStart=/bin/podman run --name %n --rm \\\n    --user       ${JENKINS_UID} \\\n    --cpus       ${JENKINS_MAX_CPU} \\\n    --memory     ${JENKINS_MAX_MEMORY} \\\n    --volume     ${JENKINS_PLUGINS}:/usr/share/jenkins/ref/plugins.txt:z \\\n    --volume     ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \\\n    --entrypoint /bin/bash \\\n    ${JENKINS_IMAGE} -c \"/usr/local/bin/install-plugins.sh \u003c /usr/share/jenkins/ref/plugins.txt\"\nExecStop=/bin/sh -c '/bin/rm -rf ${JENKINS_PLUGINS}/*'\n\n[Install]\nWantedBy=multi-user.target\n",
+        "contents": "[Unit]\nDescription=Download Jenkins plugins\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=oneshot\nEnvironmentFile=/etc/sysconfig/jenkins\nRemainAfterExit=true\nStandardOutput=journal\nExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}\nExecStart=/bin/podman run --name %n --rm \\\n  --user       ${JENKINS_UID} \\\n  --cpus       ${JENKINS_MAX_CPU} \\\n  --memory     ${JENKINS_MAX_MEMORY} \\\n  --volume     ${JENKINS_PLUGINS}:/usr/share/jenkins/ref/plugins.txt:z \\\n  --volume     ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \\\n  --entrypoint /bin/bash \\\n  ${JENKINS_IMAGE} -c \"/usr/local/bin/install-plugins.sh \u003c /usr/share/jenkins/ref/plugins.txt\"\nExecStop=/bin/sh -c '/bin/rm -rf ${JENKINS_PLUGINS}/*'\n\n[Install]\nWantedBy=multi-user.target\n",
         "enabled": true,
         "name": "jenkins-plugins.service"
       },
       {
-        "contents": "[Unit]\nDescription=Run Jenkins master\nAfter=network-online.target jenkins-plugins.service\nWants=network-online.target jenkins-plugins.service\n\n[Service]\nType=simple\nEnvironmentFile=/etc/sysconfig/jenkins\nTimeoutStartSec=180\nRestart=always\nStandardOutput=journal\nExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}\nExecStart=/bin/podman run --name %n --rm \\\n    --user    ${JENKINS_UID} \\\n    --cpus    ${JENKINS_MAX_CPU} \\\n    --memory  ${JENKINS_MAX_MEMORY} \\\n    --publish ${JENKINS_HTTP_PORT}:8080 \\\n    --publish ${JENKINS_EXECUTOR_PORT}:50000 \\\n    --volume  ${JENKINS_DATA_PATH}:/var/jenkins_home:z \\\n    --volume  ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \\\n    --env     JAVA_OPTS=\"${JENKINS_JAVA_OPTS}\" \\\n    ${JENKINS_IMAGE}\nExecStop=/bin/podman stop %n\nExecReload=/bin/podman restart %n\n\n[Install]\nWantedBy=multi-user.target",
+        "contents": "[Unit]\nDescription=Run Jenkins master\nAfter=network-online.target jenkins-plugins.service\nWants=network-online.target jenkins-plugins.service\n\n[Service]\nType=simple\nEnvironmentFile=/etc/sysconfig/jenkins\nTimeoutStartSec=180\nRestart=always\nStandardOutput=journal\nExecStartPre=-/bin/podman pull ${JENKINS_IMAGE}\nExecStart=/bin/podman run --name %n --rm \\\n  --user    ${JENKINS_UID} \\\n  --cpus    ${JENKINS_MAX_CPU} \\\n  --memory  ${JENKINS_MAX_MEMORY} \\\n  --publish ${JENKINS_HTTP_PORT}:8080 \\\n  --publish ${JENKINS_EXECUTOR_PORT}:50000 \\\n  --volume  ${JENKINS_DATA_PATH}:/var/jenkins_home:z \\\n  --volume  ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \\\n  --volume  ${JENKINS_CONFIGURATION}:/var/jenkins_home/jenkins.yaml:z \\\n  --env     JAVA_OPTS=\"${JENKINS_JAVA_OPTS}\" \\\n  ${JENKINS_IMAGE}\nExecStop=/bin/podman stop %n\nExecReload=/bin/podman restart %n\n\n[Install]\nWantedBy=multi-user.target",
         "enabled": true,
         "name": "jenkins.service"
       }

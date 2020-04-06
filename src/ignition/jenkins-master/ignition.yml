@@ -61,6 +61,77 @@ storage:
           simple-theme-plugin:0.6
           ssh-slaves:1.31.1
           pipeline-model-definition:1.6.0
+          matrix-auth:2.5
+          role-strategy:2.16
+          authorize-project:1.3.0
+    - path: /etc/jenkins/config.yml
+      mode: 0640
+      user:
+        id: 1000 # Jenkins UID inside container
+      group:
+        name: root
+      contents:
+        inline: |
+          jenkins:
+            systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code plugin\n\n"
+            securityRealm:
+              local:
+                allowsSignup: false
+                users:
+                  - id: administrator
+                    name: Jenkins Administrator
+                    password: ${ADMIN_PASSWORD:-f60f8e269a732d67c83bb3f41465ae5a}
+                  - id: developer
+                    name: Jenkins Developer
+                    password: ${DEVELOPER_PASSWORD:-a04c30dda292372faeb9f3d59ed56d36}
+            authorizationStrategy:
+              globalMatrix:
+                grantedPermissions:
+                  - Overall/Administer:administrator
+                  - Overall/Read:authenticated
+            remotingSecurity:
+              enabled: true
+            nodes:
+              - permanent:
+                  name: slave-docker
+                  labelString: linux rhel x86 docker
+                  numExecutors: 5
+                  remoteFS: /var/lib/jenkins/agent
+                  launcher:
+                    ssh:
+                      host: jenkins-slave.libvirt.local
+                      port: 22
+                      credentialsId: ssh_agents_private_key
+                      maxNumRetries: 6
+                      retryWaitTime: 30
+                      sshHostKeyVerificationStrategy:
+                        manuallyTrustedKeyVerificationStrategy:
+                          requireInitialManualTrust: false
+            disabledAdministrativeMonitors:
+              - hudson.node_monitors.MonitorMarkedNodeOffline
+              - hudson.node_monitors.TemporarySpaceMonitor
+              - hudson.node_monitors.DiskSpaceMonitor
+          credentials:
+            system:
+              domainCredentials:
+                - credentials:
+                    - basicSSHUserPrivateKey:
+                        scope: SYSTEM
+                        id: ssh_agents_private_key
+                        username: jenkins
+                        description: "SSH private key to connect to Jenkins agents"
+                        privateKeySource:
+                          directEntry:
+                            privateKey: ${SSH_AGENTS_PRIVATE_KEY}
+          unclassified:
+            location:
+              adminAddress: maintuser@libvirt.local
+              url: http://jenkins-master.libvirt.local:8080
+            simple-theme-plugin:
+              elements:
+                - cssUrl:
+                    url: https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-blue-grey.css
+
     - path: /etc/sysconfig/jenkins
       mode: 0640
       user:
@@ -78,7 +149,11 @@ storage:
           JENKINS_DATA_PATH="/var/lib/jenkins/data"
           JENKINS_PLUGINS="/etc/jenkins/plugins.txt"
           JENKINS_PLUGINS_PATH="/etc/jenkins/plugins"
-          JENKINS_JAVA_OPTS="-Djenkins.install.runSetupWizard=false -Djava.awt.headless=true"
+          JENKINS_CONFIGURATION="/etc/jenkins/config.yml"
+          JENKINS_JAVA_OPTS="\
+            -Djenkins.install.runSetupWizard=false \
+            -Djava.awt.headless=true \
+          "
 systemd:
   units:
     - name: jenkins-plugins.service
@@ -130,6 +205,7 @@ systemd:
             --publish ${JENKINS_EXECUTOR_PORT}:50000 \
             --volume  ${JENKINS_DATA_PATH}:/var/jenkins_home:z \
             --volume  ${JENKINS_PLUGINS_PATH}:/usr/share/jenkins/ref/plugins:z \
+            --volume  ${JENKINS_CONFIGURATION}:/var/jenkins_home/jenkins.yaml:z \
             --env     JAVA_OPTS="${JENKINS_JAVA_OPTS}" \
             ${JENKINS_IMAGE}
         ExecStop=/bin/podman stop %n

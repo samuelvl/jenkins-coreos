@@ -161,7 +161,14 @@ systemctl restart NetworkManager
 
 ## Deploy Jenkins
 
-Edit the `jenkins-master-ign.yml` and `jenkins-slave-ign.yml` **[FCC YAML files](https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/)** to generate Ignition files and deploy instances using Terraform.
+Edit the `jenkins-master-ign.yml` and `jenkins-slave-ign.yml` **[FCC YAML files](https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config/)** to generate Ignition files with the following configuration:
+
+- Plugins
+- Themes
+- Security
+- Slaves configuration
+
+Run `make` to deploy and test infrastructure with Terraform.
 
 ```bash
 make
@@ -169,27 +176,7 @@ make
 
 ### Configuration
 
-Go to `http://jenkins-master.libvirt.local:8080/` to setup Jenkins and install the following plugins.
-
-- Simple Theme
-- SSH Build Agents
-- Pipeline: Declarative
-- Pipeline: Stage View
-
-Set a material theme to improve (a little bit) the old and ugly UI.
-
-```bash
-https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-blue-grey.css
-```
-
-Add jenkins slaves to run build.
-
-- **Name**: slave-docker
-- **Description**: Jenkins slave to run docker containers
-- **Number of executors**: 20
-- **Remote root directory**: /var/lib/jenkins/agent
-- **Labels**: linux rhel x86 docker
-- **Usage**: Only build jobs with label expressions matching this node
+Go to `http://jenkins-master.libvirt.local:8080/` and upload the SSH private key to connect to the slaves before starting to use Jenkins. It is not included in ignition because of security reasons.
 
 ## Troubleshooting
 
@@ -199,10 +186,18 @@ Use SSH private key to access jenkins machines.
 ssh -i src/ssh/id_rsa maintuser@jenkins-master.libvirt.local
 ```
 
+Remove a Jenkins instance.
+
+```bash
+terraform destroy \
+  -var-file="configuration/tfvars/default.tfvars" \
+  -var-file="configuration/tfvars/localhost.tfvars" \
+  -target libvirt_volume.jenkins_master src
+```
+
 ## TODO
 
-- Automate plugins installation
-- Automate agent node aggregation
+- Find a secure way to include SSH private key in Ignition
 
 ## References
 
@@ -214,3 +209,4 @@ ssh -i src/ssh/id_rsa maintuser@jenkins-master.libvirt.local
 - https://libvirt.org/formatdomain.html#elements
 - https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config
 - https://github.com/jenkinsci/docker
+- https://github.com/jenkinsci/configuration-as-code-plugin
