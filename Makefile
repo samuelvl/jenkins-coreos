@@ -46,8 +46,11 @@ deploy:
 	terraform apply output/tf.$(environment).plan
 test:
 	@echo "Testing infrastructure..."
-	@curl -s -o /dev/null -w "%{http_code}" --retry-max-time 300 --retry 5 --max-time 10 --connect-timeout 5 \
-		http://jenkins-master.libvirt.local:8080/login
+	@for ((i=1;i<=100;i++)); do \
+		echo "Jenkins server code is:"; \
+		curl -s -o /dev/null -w "%{http_code}" http://jenkins-master.libvirt.local:8080/login; \
+		sleep 5; \
+	done
 destroy:
 	@echo "Destroying infrastructure..."
 	terraform destroy \

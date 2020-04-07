@@ -7,6 +7,7 @@ Deploy immutable Jenkins instance using Terraform, Fedora CoreOS and ignition.
 - Terraform (tested with 0.12.24 version).
 - Libvirt (tested with 5.6.0 version).
 - Libvirt provider for Terraform (tested with 0.6.1 version).
+- yq (tested with 3.2.1 version).
 
 Install requirements.
 
@@ -197,7 +198,7 @@ terraform destroy \
 
 ## TODO
 
-- Find a secure way to include SSH private key in Ignition
+- Find a secure way to include SSH private key in Ignition.
 
 ## References
 
