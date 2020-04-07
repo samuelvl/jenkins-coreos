@@ -165,8 +165,8 @@ Edit the `jenkins-master-ign.yml` and `jenkins-slave-ign.yml` **[FCC YAML files]
 
 - Plugins
 - Themes
+- Build agents
 - Security
-- Slaves configuration
 
 Run `make` to deploy and test infrastructure with Terraform.
 
@@ -210,3 +210,4 @@ terraform destroy \
 - https://docs.fedoraproject.org/en-US/fedora-coreos/fcct-config
 - https://github.com/jenkinsci/docker
 - https://github.com/jenkinsci/configuration-as-code-plugin
+- https://jenkinsci.github.io/job-dsl-plugin/#path/pipelineJob

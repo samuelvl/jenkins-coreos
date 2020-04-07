@@ -11,11 +11,11 @@ all: init plan deploy test
 init:
 	@echo "Generating SSH keypair for Jenkins slaves..."
 	@mkdir -p src/ssh/jenkins
-	echo -e 'y\n' | ssh-keygen -o -t rsa -b 4096 -C "" -N="" -f "$(pwd)/src/ssh/jenkins/id_rsa"
+	echo -e 'n\n' | ssh-keygen -o -t rsa -b 4096 -C "" -N "" -f "$(shell pwd)/src/ssh/jenkins/id_rsa" || true
 
 	@echo "Generating SSH keypair for maintenance user..."
 	@mkdir -p src/ssh/maintuser
-	echo -e 'y\n' | ssh-keygen -o -t rsa -b 4096 -C "" -N="" -f "$(pwd)/src/ssh/maintuser/id_rsa"
+	echo -e 'n\n' | ssh-keygen -o -t rsa -b 4096 -C "" -N "" -f "$(shell pwd)/src/ssh/maintuser/id_rsa" || true
 
 	@echo "Initializing Terraform plugins"
 	terraform init \
@@ -46,6 +46,8 @@ deploy:
 	terraform apply output/tf.$(environment).plan
 test:
 	@echo "Testing infrastructure..."
+	@curl -s -o /dev/null -w "%{http_code}" --retry-max-time 300 --retry 5 --max-time 10 --connect-timeout 5 \
+		http://jenkins-master.libvirt.local:8080/login
 destroy:
 	@echo "Destroying infrastructure..."
 	terraform destroy \
@@ -55,3 +57,5 @@ destroy:
 	@rm -rf .terraform
 	@rm -rf output/tf.$(environment).plan
 	@rm -rf state/terraform.$(environment).tfstate
+	@rm -rf src/ssh/jenkins
+	@rm -rf src/ssh/maintuser

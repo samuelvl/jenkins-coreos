@@ -12,7 +12,7 @@ passwd:
     groups:
     - sudo
     ssh_authorized_keys:
-    - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC04fip6h5UD394KK4znyT2qgZt63LlndW2NT0C8dmNn5NXQd+O5GDBNB1i/qYqR6nHJyuxD7vVrS1iiQ6yQmEqlhMyXlMkp9ojCBVv3Vhd71rdcTChyN1Gyix6CvNKWJcyBULsXTEsVYis/dc/ifW75W1gGkhxZCdU9o12EF9d7iZZPgfOM4ENq1tSqukFg2PKzaC+Cb8qJHz2NltnhNg7oA+UdTlDavwkj3tNx2gb3fB1rUTb5swA6B/dwvFor8dis3tR7+zlDRx4fyfAeSSkWHiMgRMszxPxz8c9W/B+/socu0lUYzCTO1k3bTnJitCt0VSYCE0o3qzkbVla99y+y3QOifwVGUBUqMnE3bmIR5KFGWgPWWzApYZGLRu9jFkKvslbTsMmQ3sSaARDo6q55AVOMlvmZKqZubkqi7AxVXAvfE6jOm+pOZmzr70vo5RCNTk3WOc5n0Xs5ZMHWhbkQP2gQWkDeaYJo2xHEWb49l6QWMx6Id8nIXckEfcCabMAm3XvwyveWCX6rPP35qnxiH7ntHYQ6mMR8xrJE/7AHRw98cMy25/jHpi//LHLzS88SJmfmPCwc0dyzm6+WjueMCuiCt5xO9jVe/rVRRbi4j0iaFHXHwLw5k6lz+k6N1Y4E0sFJV7ILb9w1hGA4E+pJdm1ClvVj5VCL08tbT3Afw== '
+    - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDSjzO1BU7JdexTFwS0dK0Yxo000tQXQJ/gFGMQVBlfSlCZOEk0vDWG+edu2dxQbr4SjeO3kGFnQwZEvwCGSOzvfb8nY0DmhK/FyIzNGZejWok8bdhjQBMeRw1u1woKRX35VCQ86n6tWE1T1L6L0vKXWxeC3w26/0VyinD0tzwNcd7L2h5qCIM4n4w075ojaDckKBc1q7bF+u2bi4LfJVHvDlpqg/8NxT/WjfFTA0z65PzLz+jwiAO8cIOF0jz7LKJaMXtc8pQmpJPahu0hBY4tI3+utTObN2KtUNEC0/coDOr7CQK2sYG7XkkElMNxfNRwT7lXeP7C4+g4yw7MhVZfZqQfuqwrbC+Qpbc9QaRM5SccCjwHiyFH5oHRfoNM5n4/cadmMmlvauOCHdVUmqCVyRHHyPT5nSV2CaAMxTUDA5mf6LQtVdxDd+0ln2Sd+4sOKYD0jPcleDNnhz/iJJD10mq3xRGPqCf1oKYXJfOGut17bkolxmBJtiWoNVUN4ea/KqT6y/Wk3KUcMo8SRjV9j/dU8uzpE9HEXbLInZBhFbr1AML2Zq2EysFF/pyfm3dAuZsj/SkOu6ZCIgNCgP7SRbnr0AoF5iSj2pmaq46xXyMxgjaNAl4z3unBBCu+Q6BwYyZDcHn8t8A7oa4ws5WTlAPBjtnwN6ED4RgUbdJMjw== '
 storage:
   directories:
   - path: /etc/jenkins
@@ -57,13 +57,21 @@ storage:
       name: root
     contents:
       inline: |
-        configuration-as-code:1.38
-        simple-theme-plugin:0.6
-        ssh-slaves:1.31.1
-        pipeline-model-definition:1.6.0
-        matrix-auth:2.5
-        role-strategy:2.16
-        authorize-project:1.3.0
+        configuration-as-code
+        simple-theme-plugin
+        ansicolor
+        timestamper
+        ssh-slaves
+        git
+        job-dsl
+        workflow-multibranch
+        workflow-job
+        pipeline-model-definition
+        github-branch-source
+        pipeline-input-step
+        role-strategy
+        authorize-project
+        credentials-binding
   - path: /etc/jenkins/config.yml
     mode: 0640
     user:
@@ -74,6 +82,8 @@ storage:
       inline: |
         jenkins:
           systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code plugin\n\n"
+          mode: EXCLUSIVE
+          numExecutors: 0
           securityRealm:
             local:
               allowsSignup: false
@@ -85,16 +95,47 @@ storage:
                   name: Jenkins Developer
                   password: ${DEVELOPER_PASSWORD:-a04c30dda292372faeb9f3d59ed56d36}
           authorizationStrategy:
-            globalMatrix:
-              grantedPermissions:
-                - Overall/Administer:administrator
-                - Overall/Read:authenticated
+            roleBased:
+              roles:
+                global:
+                  - name: jenkins-admins
+                    description: Jenkins administrators
+                    assignments:
+                      - administrator
+                    permissions:
+                      - Overall/Administer
+                  - name: jenkins-viewers
+                    description: Jenkins viewers
+                    assignments:
+                      - authenticated
+                    permissions:
+                      - Overall/Read
+                agents: # TODO: Wait for PR https://github.com/jenkinsci/role-strategy-plugin/pull/59
+                  - name: docker-slave-builders
+                    description: Allow to run builds in Docker slaves
+                    assignments:
+                      - developer
+                    permissions:
+                      - Agent/Build
+                    pattern: slave-docker.*
+                items:
+                  - name: orders-application-builders
+                    description: Allow to run builds for orders application
+                    assignments:
+                      - developer
+                    permissions:
+                      - Job/Read
+                      - Job/Build
+                      - Job/Cancel
+                      - Credentials/View
+                    pattern: orders-application.*
           remotingSecurity:
             enabled: true
           nodes:
             - permanent:
                 name: slave-docker
                 labelString: linux rhel x86 docker
+                mode: EXCLUSIVE
                 numExecutors: 5
                 remoteFS: /var/lib/jenkins/agent
                 launcher:
@@ -107,10 +148,35 @@ storage:
                     sshHostKeyVerificationStrategy:
                       manuallyTrustedKeyVerificationStrategy:
                         requireInitialManualTrust: false
-          disabledAdministrativeMonitors: # Wait for PR https://github.com/jenkinsci/jenkins/pull/4552 to be merged
+          disabledAdministrativeMonitors: # TODO: Wait for PR https://github.com/jenkinsci/jenkins/pull/4552
             - hudson.node_monitors.MonitorMarkedNodeOffline
             - hudson.node_monitors.TemporarySpaceMonitor
             - hudson.node_monitors.DiskSpaceMonitor
+        jobs:
+          - script: >
+              folder('orders-application')
+          - script: >
+              pipelineJob('orders-application/hello-world') {
+                  definition {
+                      cpsScm {
+                          scriptPath 'Jenkinsfile'
+                          scm {
+                              git {
+                                  remote {
+                                      url 'https://github.com/samuelvl/jenkins-coreos'
+                                  }
+                                  branch '*/master'
+                                  extensions {}
+                              }
+                          }
+                      }
+                  }
+                  triggers {
+                      scm('*/5 * * * *') {
+                          ignorePostCommitHooks(true)
+                      }
+                  }
+              }
         credentials:
           system:
             domainCredentials:
@@ -139,8 +205,8 @@ storage:
       name: root
     contents:
       inline: |
-        JENKINS_SLAVE_HOST="jenkins-slave.libvirt.local"
-        JENKINS_MASTER_URL="http://jenkins-master.libvirt.local:8080"
+        JENKINS_SLAVE_HOST=jenkins-slave.libvirt.local
+        JENKINS_MASTER_URL=http://jenkins-master.libvirt.local:8080
   - path: /etc/sysconfig/jenkins
     mode: 0640
     user:

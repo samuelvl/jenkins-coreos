@@ -20,7 +20,7 @@
         ],
         "name": "jenkins",
         "sshAuthorizedKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDdRi6tfqKymalApaQvZcYQ3SD/DIKQoOCxMaK95muz2qX5ugU0pVu0BcxTl2m8/dA53/4vkAZrr1lVWB5g7OpA5GhpVflFdrzK9dp0j9qvwhKjyaMKxGwDjIZSTToaVqNaAEK/yuch7XYRQj4s+zjxb+tYdiUY4QSiR4d5nCCAcgbWcRHPZ9Ax2pX8PpQ2n2GgjaYKjZNyPNm68BQTMQ57ndm8UyQgUWjSLEVOmFjajV08zAcAKlmvK+ds8AqBXvoYxiefBNTojrdt5yhWqlAiV5uYtQzKR4Q/otN/Ovcx5dedMT9lFhlyoWZVeiSbI6KGyuIJvbczoqZ8w74TYtS5nn6ASEzJkLP9OaBujwBRAI2rHcNKS3wWO4JLHYq6Nof1sGE4wvFF/lnD0JXyO8dGqb/09WastHvO0tnITLGNwYLXi/TXWzPVnZqQ4GpgJ4YEhyBO5ZR1TBopZf8JvT9bh2tPGjymlCXqR5KeVsPrGhB97GHv5j1BVYAWKCUww3lQZTxCI8F3MlI1KAJl3u3IoCQMjkMUmmMJuF0GKjZwZX6KHmpL0R7j3gQfTk0+HWwLxJwhOr3bXIlvEoNFpiixGyMWqI/JucytThBgeiZQMYSfIcuB5xEPI42lrT700YBAU7qC7eI3TbPoyIm8MEKyq3htOxr2eGD5xIZoK7PIew== "
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC5baUEQlME6MHDIq5G2bNpub/YIr8vRe6isyil6IOMpac2q9r8uyME3zx2MDff/cI50ppeeqeDYIcy7dzNrTtdeTdeywTIBcFt4gSwwDwWW74UjyKjI3zDOvRo/P6UVEfiGlrzOTIxS3cxoJNe2oJ1vowjsusrxZh10VQJavEWo3VVWdUSvtc7zD4HWMEob/8pgQKGGgl97u0wVb8WjCR1lLWvsuU+LLIg1pzUQaLqlGF0ONugAdlrT+zu4h3HPUtqsI2vcPzvT7d6D3Ce2AxawBLYyfraLf1mU/SXBEJ/zE0UohVbSCzmgscqshxwTDYdIUnhu3j5WCTNHH3HOET2k72204pTUZhTjhpuqtdT4NlpG3RJPa/xtbEMGNyYEwuKXTuPmJBBeMlkEQVf+3tphU0BXYl4wzeunBIoeLwMYiniHnsJFNq6pGrTP/k/Jjdk/FXNb/q1dBZguCBweRfTlzNR5ayzQpd5DgeLKYU1TXv/wPIkjIkf3Cr2gbJPtyBHMxOA5NR+iINtI5ZXLhZFgfS/Ovie0nX5iwpnM2ctuMLFtJjmxyRaF7gJorSDtOOZsD6Ueo1svTEwChCo4E7qbl8cf0iozH5nlTkoH1c7QnEAHQSlfEPRl5NYIdAy+hB+JZqS60526sjsYhlTas9EuCeUOw+KCaRdAtDR232UrQ== "
         ],
         "uid": 9999
       },
@@ -30,7 +30,7 @@
         ],
         "name": "maintuser",
         "sshAuthorizedKeys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC04fip6h5UD394KK4znyT2qgZt63LlndW2NT0C8dmNn5NXQd+O5GDBNB1i/qYqR6nHJyuxD7vVrS1iiQ6yQmEqlhMyXlMkp9ojCBVv3Vhd71rdcTChyN1Gyix6CvNKWJcyBULsXTEsVYis/dc/ifW75W1gGkhxZCdU9o12EF9d7iZZPgfOM4ENq1tSqukFg2PKzaC+Cb8qJHz2NltnhNg7oA+UdTlDavwkj3tNx2gb3fB1rUTb5swA6B/dwvFor8dis3tR7+zlDRx4fyfAeSSkWHiMgRMszxPxz8c9W/B+/socu0lUYzCTO1k3bTnJitCt0VSYCE0o3qzkbVla99y+y3QOifwVGUBUqMnE3bmIR5KFGWgPWWzApYZGLRu9jFkKvslbTsMmQ3sSaARDo6q55AVOMlvmZKqZubkqi7AxVXAvfE6jOm+pOZmzr70vo5RCNTk3WOc5n0Xs5ZMHWhbkQP2gQWkDeaYJo2xHEWb49l6QWMx6Id8nIXckEfcCabMAm3XvwyveWCX6rPP35qnxiH7ntHYQ6mMR8xrJE/7AHRw98cMy25/jHpi//LHLzS88SJmfmPCwc0dyzm6+WjueMCuiCt5xO9jVe/rVRRbi4j0iaFHXHwLw5k6lz+k6N1Y4E0sFJV7ILb9w1hGA4E+pJdm1ClvVj5VCL08tbT3Afw== "
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDSjzO1BU7JdexTFwS0dK0Yxo000tQXQJ/gFGMQVBlfSlCZOEk0vDWG+edu2dxQbr4SjeO3kGFnQwZEvwCGSOzvfb8nY0DmhK/FyIzNGZejWok8bdhjQBMeRw1u1woKRX35VCQ86n6tWE1T1L6L0vKXWxeC3w26/0VyinD0tzwNcd7L2h5qCIM4n4w075ojaDckKBc1q7bF+u2bi4LfJVHvDlpqg/8NxT/WjfFTA0z65PzLz+jwiAO8cIOF0jz7LKJaMXtc8pQmpJPahu0hBY4tI3+utTObN2KtUNEC0/coDOr7CQK2sYG7XkkElMNxfNRwT7lXeP7C4+g4yw7MhVZfZqQfuqwrbC+Qpbc9QaRM5SccCjwHiyFH5oHRfoNM5n4/cadmMmlvauOCHdVUmqCVyRHHyPT5nSV2CaAMxTUDA5mf6LQtVdxDd+0ln2Sd+4sOKYD0jPcleDNnhz/iJJD10mq3xRGPqCf1oKYXJfOGut17bkolxmBJtiWoNVUN4ea/KqT6y/Wk3KUcMo8SRjV9j/dU8uzpE9HEXbLInZBhFbr1AML2Zq2EysFF/pyfm3dAuZsj/SkOu6ZCIgNCgP7SRbnr0AoF5iSj2pmaq46xXyMxgjaNAl4z3unBBCu+Q6BwYyZDcHn8t8A7oa4ws5WTlAPBjtnwN6ED4RgUbdJMjw== "
         ],
         "uid": 1001
       }
@@ -80,7 +80,7 @@
   "systemd": {
     "units": [
       {
-        "contents": "[Unit]\nDescription=Install Overlay Packages\nConditionFirstBoot=yes\nWants=network-online.target\nBefore=boot-complete.target\nAfter=network-online.target\nAfter=multi-user.target\n\n[Service]\nType=oneshot\nExecStart=rpm-ostree install java-1.8.0-openjdk\n# An alternative to --reboot\nExecStartPost=rpm-ostree ex livefs --i-like-danger\n\n[Install]\nRequiredBy=boot-complete.target\nWantedBy=multi-user.target",
+        "contents": "[Unit]\nDescription=Install Overlay Packages\nConditionFirstBoot=yes\nWants=network-online.target\nBefore=boot-complete.target\nAfter=network-online.target\nAfter=multi-user.target\n\n[Service]\nType=oneshot\nExecStart=rpm-ostree install java-1.8.0-openjdk\n# An alternative to --reboot\nExecStartPost=rpm-ostree ex livefs --i-like-danger\n\n[Install]\nRequiredBy=boot-complete.target\nWantedBy=multi-user.target\n",
         "enabled": true,
         "name": "overlay-install.service"
       }

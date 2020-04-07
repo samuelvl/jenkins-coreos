@@ -6,19 +6,9 @@ pipeline {
         }
     }
     stages {
-        stage('Build') {
-            steps {
-                sh 'id'
-            }
-        }
         stage('Test') {
             steps {
-                sh 'hostname'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'date'
+                sh 'echo "Hello world!"'
             }
         }
     }
