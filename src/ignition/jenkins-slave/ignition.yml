@@ -2,61 +2,61 @@ variant: fcos
 version: 1.0.0
 passwd:
   users:
-    - name: jenkins
-      uid: 9999 # 1000 is already used by core user
-      groups:
-        - docker
-      ssh_authorized_keys:
-        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDBKV5KDq67zdfvzy6BIG0xdC8lJX9qzzUkXKlZRts15Xd8bJF99EfKHfjNu27ed2PANhZ+gb5nGrtv6Fl9erjKG70IxM8Udffwh7RTt6RqnbPQh5Q0WGGGxCSPwLX96NX3ObayUHs2R1R7E2og5KLvz4uW20sSZTqzN1oLP1VUwCn3pKL4uApPBQ65ySDG9CK2Y2tKSgiWjkMtIcNZqb+m44pddObMwFBP4EaCqY7AiQ6MijTbGg/7aqyAFSw6TehQ6xnD0u/Jb/Z7Yc2fJdAx0hHoIo9FSkT9ovKP/SpEKCurIGnZn6zO1OE7wr2a6xOSdHEQvbIC4Rkm0QNOZetYXuL2JqhT/+UUWLnD6jRbxNpEPgdu6ySnHWwOhb7LnbH2uQU9tZUuyN0wrUD4LoJ9l8aUv6JUFiX4NKI3Y1AIpwIaz/759wSIQL5Cav3CASGifVI+pETkMBVftf4J8FPuXWkJpkf8sdVnHXscWNKLodGC7tc//3PUnY3NYEXja8lfcsBJgfM5muuIQbKOD58nj/oorWc48WDBsWNV802WHp3HUtfVntTG69LZAVE9pB3k0jUZPqSvi5ILoBlWaohlNr+vtJJeLSwdMaDXZrAJrG4I5jP92sFNu6Ki4TgMK2YB4bkZMpPWzreIpntl701XbuTYNctacnEHQfCSBoxOjQ== jenkins@libvirt.local
-    - name: maintuser
-      uid: 1001
-      groups:
-        - sudo
-      ssh_authorized_keys:
-        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0NK6M/cGCjwEf4jLIN42xBFCUWt+pXRuE+n21YadwqcUHdBn6qv4lyyVFMQ22fzcRGCb5D2yU1+UCiNNEnMFpQxTrqnvzIyhaLJAxtkO24bOk2wG2rLaTLCxJnhInfgRM3BJ/Rom95HAdnGPdw8yqBqtcHndPeKcTBF0eeGPi3EZVb081qdnftPMd45p5M2Zo1x6tbQpQfKeXqm7UF79tZoaIJ1yGEIJhHrAQf/zUgCaYDOXUlnTc9O9g/mIoEXIu21ZawR93h9HZHZvod9gWWvnlouOJBq+YfqvSdVxhmD1xXNkbTn+TZSURo+ne35yVD8rsXWjGwm4y2zE9d+md+C7+vjuwgGBY15Vln2SgL6G+QRcz6kwsFwZrOLI0BwjFhvBOSallvl9rittSwke9Nk+nw9+2HrY/LucgeB6qZUNI5BzTwzfNjBxJVYhcIXcOdem5TBsovpvcBxnNVHOpqiU8wVoNa4P55duCX4CRyV8gsrAVBIk/Y+IrucMR4D/YqJaVBpi3D3xMe3mVj0jMIYQqvRfQkK4Dw04bRKFUjf7drc3rzFu/72QtWaM98t1b1IhMOMNOtiNhploNcGuuSVgDfhnY24RV1sJ8hxjH85YBUNMi6+Z2Et+hiQ88kUaXyapVg6E2KvtLy7DBoNDlEZtxJkzS98Isf2tzQ8mS9w== maintuser@libvirt.local
+  - name: jenkins
+    uid: 9999 # 1000 is already used by core user
+    groups:
+    - docker
+    ssh_authorized_keys:
+    - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDdRi6tfqKymalApaQvZcYQ3SD/DIKQoOCxMaK95muz2qX5ugU0pVu0BcxTl2m8/dA53/4vkAZrr1lVWB5g7OpA5GhpVflFdrzK9dp0j9qvwhKjyaMKxGwDjIZSTToaVqNaAEK/yuch7XYRQj4s+zjxb+tYdiUY4QSiR4d5nCCAcgbWcRHPZ9Ax2pX8PpQ2n2GgjaYKjZNyPNm68BQTMQ57ndm8UyQgUWjSLEVOmFjajV08zAcAKlmvK+ds8AqBXvoYxiefBNTojrdt5yhWqlAiV5uYtQzKR4Q/otN/Ovcx5dedMT9lFhlyoWZVeiSbI6KGyuIJvbczoqZ8w74TYtS5nn6ASEzJkLP9OaBujwBRAI2rHcNKS3wWO4JLHYq6Nof1sGE4wvFF/lnD0JXyO8dGqb/09WastHvO0tnITLGNwYLXi/TXWzPVnZqQ4GpgJ4YEhyBO5ZR1TBopZf8JvT9bh2tPGjymlCXqR5KeVsPrGhB97GHv5j1BVYAWKCUww3lQZTxCI8F3MlI1KAJl3u3IoCQMjkMUmmMJuF0GKjZwZX6KHmpL0R7j3gQfTk0+HWwLxJwhOr3bXIlvEoNFpiixGyMWqI/JucytThBgeiZQMYSfIcuB5xEPI42lrT700YBAU7qC7eI3TbPoyIm8MEKyq3htOxr2eGD5xIZoK7PIew== '
+  - name: maintuser
+    uid: 1001
+    groups:
+    - sudo
+    ssh_authorized_keys:
+    - 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC04fip6h5UD394KK4znyT2qgZt63LlndW2NT0C8dmNn5NXQd+O5GDBNB1i/qYqR6nHJyuxD7vVrS1iiQ6yQmEqlhMyXlMkp9ojCBVv3Vhd71rdcTChyN1Gyix6CvNKWJcyBULsXTEsVYis/dc/ifW75W1gGkhxZCdU9o12EF9d7iZZPgfOM4ENq1tSqukFg2PKzaC+Cb8qJHz2NltnhNg7oA+UdTlDavwkj3tNx2gb3fB1rUTb5swA6B/dwvFor8dis3tR7+zlDRx4fyfAeSSkWHiMgRMszxPxz8c9W/B+/socu0lUYzCTO1k3bTnJitCt0VSYCE0o3qzkbVla99y+y3QOifwVGUBUqMnE3bmIR5KFGWgPWWzApYZGLRu9jFkKvslbTsMmQ3sSaARDo6q55AVOMlvmZKqZubkqi7AxVXAvfE6jOm+pOZmzr70vo5RCNTk3WOc5n0Xs5ZMHWhbkQP2gQWkDeaYJo2xHEWb49l6QWMx6Id8nIXckEfcCabMAm3XvwyveWCX6rPP35qnxiH7ntHYQ6mMR8xrJE/7AHRw98cMy25/jHpi//LHLzS88SJmfmPCwc0dyzm6+WjueMCuiCt5xO9jVe/rVRRbi4j0iaFHXHwLw5k6lz+k6N1Y4E0sFJV7ILb9w1hGA4E+pJdm1ClvVj5VCL08tbT3Afw== '
 storage:
   directories:
-    - path: /var/lib/jenkins
-      mode: 0750
-      user:
-        name: jenkins
-      group:
-        name: root
-    - path: /var/lib/jenkins/agent
-      mode: 0750
-      user:
-        name: jenkins
-      group:
-        name: root
+  - path: /var/lib/jenkins
+    mode: 0750
+    user:
+      name: jenkins
+    group:
+      name: root
+  - path: /var/lib/jenkins/agent
+    mode: 0750
+    user:
+      name: jenkins
+    group:
+      name: root
   files:
-    - path: /etc/hostname
-      overwrite: true
-      mode: 0644
-      user:
-        name: root
-      group:
-        name: root
-      contents:
-        inline: jenkins-slave.libvirt.local
+  - path: /etc/hostname
+    overwrite: true
+    mode: 0644
+    user:
+      name: root
+    group:
+      name: root
+    contents:
+      inline: jenkins-slave.libvirt.local
 systemd:
   units:
-    - name: overlay-install.service
-      enabled: true
-      contents: |
-        [Unit]
-        Description=Install Overlay Packages
-        ConditionFirstBoot=yes
-        Wants=network-online.target
-        Before=boot-complete.target
-        After=network-online.target
-        After=multi-user.target
+  - name: overlay-install.service
+    enabled: true
+    contents: |
+      [Unit]
+      Description=Install Overlay Packages
+      ConditionFirstBoot=yes
+      Wants=network-online.target
+      Before=boot-complete.target
+      After=network-online.target
+      After=multi-user.target
 
-        [Service]
-        Type=oneshot
-        ExecStart=rpm-ostree install java-1.8.0-openjdk
-        # An alternative to --reboot
-        ExecStartPost=rpm-ostree ex livefs --i-like-danger
+      [Service]
+      Type=oneshot
+      ExecStart=rpm-ostree install java-1.8.0-openjdk
+      # An alternative to --reboot
+      ExecStartPost=rpm-ostree ex livefs --i-like-danger
 
-        [Install]
-        RequiredBy=boot-complete.target
-        WantedBy=multi-user.target
+      [Install]
+      RequiredBy=boot-complete.target
+      WantedBy=multi-user.target
